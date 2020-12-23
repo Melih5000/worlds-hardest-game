@@ -1,1 +1,1 @@
-# worlds-hardest-game
+# worlds-hardest-game_JavAvengers Edition
