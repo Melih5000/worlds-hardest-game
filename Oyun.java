@@ -1,5 +1,3 @@
-package wh.game;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -25,7 +23,7 @@ public class Oyun extends JPanel implements KeyListener,ActionListener{
 	image14,image15;
 	private int playerX=32;
 	private int playerY=224;
-	private int change=5;
+	private int change=10;
 	
 	
 	public Oyun() {
