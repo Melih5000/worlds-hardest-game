@@ -16,7 +16,7 @@ public class OyunEkrani extends JFrame {
 	ekran.setResizable(false);
 	ekran.setFocusable(false);
 	
-	ekran.setSize(975, 677);
+	ekran.setSize(960, 660);
 	
 	ekran.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
