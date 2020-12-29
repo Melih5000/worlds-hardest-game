@@ -30,6 +30,7 @@ public class OyunEkrani extends JFrame {
 	
 	ekran.add(oyun);
 	
+	ekran.setLocationRelativeTo(null);
 	ekran.setVisible(true);
 	
 	}
