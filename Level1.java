@@ -13,7 +13,7 @@ public class Level1 extends Level{
 	
 	public Level1() {
 		try {
-			level1 = ImageIO.read(new FileImageInputStream(new File("adsýz.png")));
+			level1 = ImageIO.read(new FileImageInputStream(new File("Level1.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
