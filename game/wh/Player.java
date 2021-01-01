@@ -1,3 +1,4 @@
+package game.wh;
 
 import javax.swing.*;
 import java.awt.Color;
