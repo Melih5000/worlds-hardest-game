@@ -1,7 +1,10 @@
 package wh.game;
 
-public class Level {
+import java.awt.*;
+
+public class Level extends Rectangle {
 	
 	public Level() {
 	}
+
 }

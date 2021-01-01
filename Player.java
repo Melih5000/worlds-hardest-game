@@ -6,28 +6,52 @@ import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.imageio.stream.FileImageInputStream;
+import java.util.ArrayList;
 
 public class Player extends Rectangle implements KeyListener {
 	
 	
-	private double speedX,speedY;
+	private int speedX;
+	private int speedY;
+	private int lastX, lastY;
 	private BufferedImage player;
-	
-	public Player(double x, double y, int width, int height) {
+
+
+
+	public Player(int x, int y, int width, int height) {
+
 		setBounds((int)x,(int)y,width,height);
 		speedX = 0;
 		speedY = 0;
 		
 	}
 	
-	public void update() {
-		this.x += speedX;
-		this.y += speedY;
+	public void update(ArrayList<Rectangle> r) {
+
+		boolean intersectedBlock = false;
+
+		for (int i = 0; i < r.size(); i++) {
+			Rectangle rec = r.get(i);
+
+			if (rec.intersects(this)) {
+				intersectedBlock = true;
+				break;
+			}
+		}
+
+		if (intersectedBlock) {
+			this.x = lastX;
+			this.y = lastY;
+			this.x += 0;
+			this.y += 0;
+
+		} else {
+			lastX = this.x;
+			lastY = this.y;
+			this.x += speedX;
+			this.y += speedY;
+		}
+
 	}
 	
 	public void drawPlayer(Graphics g) {
@@ -40,11 +64,11 @@ public class Player extends Rectangle implements KeyListener {
 		
 	}
 
-	public void setSpeedX(double speedX) {
+	public void setSpeedX(int speedX) {
 		this.speedX = speedX;
 	}
 
-	public void setSpeedY(double speedY) {
+	public void setSpeedY(int speedY) {
 		this.speedY = speedY;
 	}
 
@@ -73,15 +97,19 @@ public class Player extends Rectangle implements KeyListener {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_RIGHT:
 			this.setSpeedX(0);
+			lastX = (int)this.getX();
 			break;
 		case KeyEvent.VK_LEFT:
 			this.setSpeedX(0);
+			lastX = (int)this.getX();
 			break;
 		case KeyEvent.VK_UP:
 			this.setSpeedY(0);
+			lastY = (int)this.getY();
 			break;
 		case KeyEvent.VK_DOWN:
 			this.setSpeedY(0);
+			lastY = (int)this.getY();
 			break;
 		}
 	}

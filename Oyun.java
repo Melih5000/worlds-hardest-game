@@ -13,7 +13,7 @@ public class Oyun extends JPanel implements ActionListener{
 	
 	Timer timer = new Timer(10,this);
 	ArrayList<Level> levels;
-	private Level1 level;
+	private Level1 level1;
 	Player player;
 	
 	
@@ -21,9 +21,9 @@ public class Oyun extends JPanel implements ActionListener{
 		
 		levels = new ArrayList<Level>();
 		setPreferredSize(new Dimension(640,480));
-		level = new Level1();
+		level1 = new Level1();
 		timer.start();
-		player = new Player(32,224,16,16);
+		player = new Player(40,216,16,16);
 		addKeyListener(player);
 		
 	}
@@ -34,7 +34,8 @@ public class Oyun extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		super.paint(g);
 		
-		g.drawImage(level.getLevel1(), 0, 0,640,480, null);
+		g.drawImage(level1.getLevel1(), 0, 0,640,480, null);
+		level1.drawWalls(g);
 		player.drawPlayer(g);
 		
 	}
@@ -49,7 +50,8 @@ public class Oyun extends JPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		player.update();
+
+		player.update(level1.getWallRecs());
 		repaint();
 	}
 	
