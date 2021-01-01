@@ -1,4 +1,3 @@
-package wh.game;
 
 import java.awt.*;
 

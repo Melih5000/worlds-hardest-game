@@ -1,4 +1,3 @@
-package wh.game;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -10,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.FileImageInputStream;
 
 public class Level1 extends Level{
+
 
 	private BufferedImage level1;
 	private ArrayList<Rectangle> wallRecs;
