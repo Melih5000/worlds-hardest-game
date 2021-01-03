@@ -1,3 +1,4 @@
+package game.wh;
 
 import java.awt.Dimension;
 import java.awt.HeadlessException;
@@ -11,28 +12,28 @@ public class OyunEkrani extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
-	OyunEkrani ekran = new OyunEkrani("World's Hardest Game: Javavengers Edition");
 
-	ekran.setResizable(false);
-	ekran.setFocusable(false);
+		OyunEkrani ekran = new OyunEkrani("World's Hardest Game: Javavengers Edition");
 
-	ekran.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
-	Oyun oyun = new Oyun();
-	
-	oyun.requestFocus();
-	
-	
-	oyun.setFocusable(true);
-	oyun.setFocusTraversalKeysEnabled(false);
-	
-	ekran.add(oyun);
-	ekran.pack();
-	
-	ekran.setLocationRelativeTo(null);
-	ekran.setVisible(true);
-	
+		ekran.setResizable(false);
+		ekran.setFocusable(false);
+
+		ekran.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		Oyun oyun = new Oyun();
+
+		oyun.requestFocus();
+
+
+		oyun.setFocusable(true);
+		oyun.setFocusTraversalKeysEnabled(false);
+
+		ekran.add(oyun);
+		ekran.pack();
+
+		ekran.setLocationRelativeTo(null);
+		ekran.setVisible(true);
+
 	}
 
 }

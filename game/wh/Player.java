@@ -1,5 +1,7 @@
 package game.wh;
 
+import javax.imageio.ImageIO;
+import javax.imageio.stream.FileImageInputStream;
 import javax.swing.*;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -9,128 +11,147 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Player extends Rectangle implements KeyListener, ActionListener {
-	
-	Timer timer = new Timer(1,this::actionPerformed);
+public class Player extends Rectangle implements KeyListener {
 
-	private int speedX;
-	private int speedY;
-	private int lastX, lastY;
-	private int tempX,tempY;
-	private BufferedImage player;
-	private ArrayList<Integer> lastXPoints;
-	private ArrayList<Integer> lastYPoints;
 
+	private boolean collidingUp = false;
+	private boolean collidingDown = false;
+	private boolean collidingLeft = false;
+	private boolean collidingRight = false;
+	private boolean isPressedUp = false;
+	private boolean isPressedDown = false;
+	private boolean isPressedLeft = false;
+	private boolean isPressedRight = false;
+	private Level1 level1 = new Level1();
 
 
 	public Player(int x, int y, int width, int height) {
 
-		setBounds((int)x,(int)y,width,height);
-		speedX = 0;
-		speedY = 0;
-		lastXPoints = new ArrayList<Integer>();
-		lastYPoints = new ArrayList<Integer>();
-		timer.start();
+		setBounds(x,y,width,height);
+
 	}
-	
-	public void update(ArrayList<Rectangle> r) {
 
-		boolean intersectedBlock = false;
-		Rectangle rec=null;
+	public void update(Level1 level1) {
 
-		for (int i = 0; i < r.size(); i++) {
-			rec = r.get(i);
+		checkCollisionUp(level1);
+		checkCollisionDown(level1);
+		checkCollisionLeft(level1);
+		checkCollisionRight(level1);
 
-			if (rec.intersects(this)) {
-				intersectedBlock = true;
-				break;
+		if(this.isPressedUp && !this.collidingUp)
+			this.y --;
+		if(this.isPressedDown && !this.collidingDown)
+			this.y ++;
+		if(this.isPressedLeft && !this.collidingLeft)
+			this.x --;
+		if(this.isPressedRight && !this.collidingRight)
+			this.x ++;
+
+		for(Enemy e : level1.enemies){
+			if(this.intersects(e)) {
+				this.x = 40;
+				this.y = 216;
+				for(Coin c : level1.coins){
+					c.setCollected(false);
+				}
 			}
 		}
 
-		if (intersectedBlock) {
-			Rectangle r1 = new Rectangle(0,0,16,16);
-
-			for (int i = 0; i<lastXPoints.size(); i++) {
-
-				for(int j = 0; j<lastYPoints.size(); j++){
-
-					r1 = new Rectangle(lastXPoints.get(i),lastYPoints.get(j),16,16);
-
-					if(!r1.intersects(rec)){
-						this.y = lastYPoints.get(j);
-
-					}
-
-				}
-
-				if(!r1.intersects(rec)){
-					this.x = lastXPoints.get(i);
-				}
-			}
-			/*this.x = lastX;
-			this.y = lastY;
-			this.x += 0;
-			this.y += 0;*/
-
-		} else {
-
-			this.x += speedX;
-			//tempX = this.x;
-			//lastXPoints.add(tempX);
-
-			this.y += speedY;
-			//tempY = this.y;
-			//lastYPoints.add(tempY);
-
+		for(Coin c : level1.coins){
+			if(this.intersects(c))
+				c.setCollected(true);
 		}
 
 	}
-	
+
+	public Rectangle getRelativeVerticalWall(Level1 level1, int x, int y){
+		for(Rectangle rec : level1.getWallRecs()){
+			if(x >= rec.getX() && x <= rec.getX()+16 && y == rec.getY()){
+				return rec;
+			}
+		}
+		return null;
+	}
+
+	public Rectangle getRelativeHorizontalWall(Level1 level1, int x, int y){
+		for(Rectangle rec : level1.getWallRecs()){
+			if(x == rec.getX() && y <= rec.getY()+16 && y >= rec.getY()){
+				return rec;
+			}
+		}
+		return null;
+	}
+
+	public void checkCollisionUp(Level1 level1){
+		if((getRelativeVerticalWall(level1,this.x,this.y-17)) != null ||
+				(getRelativeVerticalWall(level1,this.x+16,this.y-17)) != null) {
+			this.collidingUp = true;
+			return;
+		}
+		this.collidingUp = false;
+	}
+
+	public void checkCollisionDown(Level1 level1){
+		if((getRelativeVerticalWall(level1,this.x,this.y+17)) != null ||
+				(getRelativeVerticalWall(level1,this.x+16,this.y+17)) != null) {
+			this.collidingDown = true;
+			return;
+		}
+		this.collidingDown = false;
+	}
+
+	public void checkCollisionLeft(Level1 level1){
+		if((getRelativeHorizontalWall(level1,this.x-17,this.y)) != null ||
+				(getRelativeHorizontalWall(level1,this.x-17,this.y+16)) != null) {
+			this.collidingLeft = true;
+			return;
+		}
+		this.collidingLeft = false;
+	}
+
+	public void checkCollisionRight(Level1 level1){
+		if((getRelativeHorizontalWall(level1,this.x+17,this.y)) != null ||
+				(getRelativeHorizontalWall(level1,this.x+17,this.y+16)) != null){
+			this.collidingRight = true;
+			return;
+		}
+		this.collidingRight = false;
+	}
+
+
 	public void drawPlayer(Graphics g) {
-		
-		
+
+
 		//g.setColor(new Color(0x00000000, true));
 		g.setColor(Color.GREEN);
 		g.fillRect(this.x, this.y, this.width, this.height);
-		
-		
+
+
 	}
 
-	public void lastPosition(){
-		tempX = this.x;
-		lastXPoints.add(tempX);
 
-		tempY = this.y;
-		lastYPoints.add(tempY);
-	}
-
-	public void setSpeedX(int speedX) {
-		this.speedX = speedX;
-	}
-
-	public void setSpeedY(int speedY) {
-		this.speedY = speedY;
-	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch(e.getKeyCode()) {
-		case KeyEvent.VK_RIGHT:
-			this.setSpeedX(1);
-			break;
-		case KeyEvent.VK_LEFT:
-			this.setSpeedX(-1);
-			break;
-		case KeyEvent.VK_UP:
-			this.setSpeedY(-1);
-			break;
-		case KeyEvent.VK_DOWN:
-			this.setSpeedY(1);
-			break;
+			case KeyEvent.VK_RIGHT:
+				isPressedRight = true;
+				break;
+			case KeyEvent.VK_LEFT:
+				isPressedLeft = true;
+				break;
+			case KeyEvent.VK_UP:
+				isPressedUp = true;
+				break;
+			case KeyEvent.VK_DOWN:
+				isPressedDown = true;
+				break;
 		}
 	}
 
@@ -138,30 +159,25 @@ public class Player extends Rectangle implements KeyListener, ActionListener {
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 		switch(e.getKeyCode()) {
-		case KeyEvent.VK_RIGHT:
-			this.setSpeedX(0);
-			break;
-		case KeyEvent.VK_LEFT:
-			this.setSpeedX(0);
-			break;
-		case KeyEvent.VK_UP:
-			this.setSpeedY(0);
-			break;
-		case KeyEvent.VK_DOWN:
-			this.setSpeedY(0);
-			break;
+			case KeyEvent.VK_RIGHT:
+				isPressedRight = false;
+				break;
+			case KeyEvent.VK_LEFT:
+				isPressedLeft = false;
+				break;
+			case KeyEvent.VK_UP:
+				isPressedUp = false;
+				break;
+			case KeyEvent.VK_DOWN:
+				isPressedDown = false;
+				break;
 		}
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		this.lastPosition();
-	}
 }

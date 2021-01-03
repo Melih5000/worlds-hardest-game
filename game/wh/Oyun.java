@@ -10,36 +10,36 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Oyun extends JPanel implements ActionListener{
-	
+
 	Timer timer = new Timer(10,this);
-	ArrayList<Level> levels;
 	private Level1 level1;
-	Player player;
-	
-	
+	Player player = new Player(40,216,16,16);
+
+
 	public Oyun() {
-		
-		levels = new ArrayList<Level>();
+
 		setPreferredSize(new Dimension(640,480));
 		level1 = new Level1();
 		timer.start();
-		player = new Player(40,216,16,16);
 		addKeyListener(player);
-		
+
 	}
-	
-	
+
+
 	@Override
 	public void paint(Graphics g) {
 		// TODO Auto-generated method stub
 		super.paint(g);
-		
+
 		g.drawImage(level1.getLevel1(), 0, 0,640,480, null);
-		level1.drawWalls(g);
+		level1.grapCaller(g);
 		player.drawPlayer(g);
-		
+		level1.levelMove(80,128);
+
+
+
 	}
-	
+
 	@Override
 	public void repaint() {
 		// TODO Auto-generated method stub
@@ -51,10 +51,12 @@ public class Oyun extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 
-		player.update(level1.getWallRecs());
+		player.update(level1);
+		level1.enemyUpdate();
 		repaint();
+
 	}
-	
-	
-	
+
+
+
 }
