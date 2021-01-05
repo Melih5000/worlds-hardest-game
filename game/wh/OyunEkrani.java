@@ -1,5 +1,4 @@
 package game.wh;
-
 import java.awt.Dimension;
 import java.awt.HeadlessException;
 
