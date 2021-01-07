@@ -33,6 +33,10 @@ public class OyunEkrani extends JFrame {
 		ekran.setLocationRelativeTo(null);
 		ekran.setVisible(true);
 
+		// Create the main menu
+    MainMenu mainMenu = new MainMenu();
+		mainMenu.setVisible(true);
+
 	}
 
 }
